@@ -3,28 +3,22 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            HomeView()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
-                }
-            
             EyeCheckView()
                 .tabItem {
                     Image(systemName: "camera.fill")
-                    Text("Eye Check")
-                }
-            
-            EducationView()
-                .tabItem {
-                    Image(systemName: "book.fill")
-                    Text("Learn")
+                    Text("Scan")
                 }
             
             ResultsView()
                 .tabItem {
                     Image(systemName: "chart.bar.fill")
                     Text("Results")
+                }
+            
+            EducationView()
+                .tabItem {
+                    Image(systemName: "book.fill")
+                    Text("Learn")
                 }
             
             SettingsView()
@@ -59,13 +53,13 @@ struct HomeView: View {
                     }
                     .padding(.top, 20)
                     
-                    // Quick Actions
+                    // Quick Actions (practical)
                     QuickActionsSection()
                     
-                    // Recent Activity
+                    // Recent Activity (practical)
                     RecentActivitySection()
                     
-                    // Health Tips
+                    // Health Tips (practical)
                     HealthTipsSection()
                 }
                 .padding()
@@ -1273,6 +1267,311 @@ struct SettingsRow: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 12)
+    }
+}
+
+// MARK: - Pitch Tab
+
+struct OpeningStatementCard: View {
+    var body: some View {
+        VStack(spacing: 14) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "quote.opening")
+                    .font(.title2)
+                    .foregroundColor(.blue)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("We turn the powerful computer in your pocket into a first-line screening tool for eye cancer.")
+                        .font(.headline)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Text("Take a photo. Analyze on-device. See a clear visual highlight. 100% private.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+            }
+            
+            Divider()
+            
+            HStack(spacing: 18) {
+                PitchBadge(icon: "hand.tap.fill", title: "Simple")
+                PitchBadge(icon: "lock.fill", title: "Private")
+                PitchBadge(icon: "eye.fill", title: "Clear")
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
+        )
+    }
+}
+
+struct PitchBadge: View {
+    let icon: String
+    let title: String
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .foregroundColor(.blue)
+            Text(title)
+                .font(.caption)
+                .fontWeight(.semibold)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(
+            Capsule().fill(Color.blue.opacity(0.08))
+        )
+    }
+}
+
+struct WorkflowSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Workflow")
+                .font(.title2)
+                .fontWeight(.bold)
+            
+            VStack(spacing: 12) {
+                StepRow(
+                    left: StepItem(icon: "camera.fill", title: "Capture", detail: "User takes a clear eye photo"),
+                    right: StepItem(icon: "bolt.circle.fill", title: "On‑Device AI", detail: "SegFormer via Core ML")
+                )
+                StepRow(
+                    left: StepItem(icon: "square.grid.3x3.fill.square", title: "Segmentation", detail: "Pixel‑level mask"),
+                    right: StepItem(icon: "photo.on.rectangle", title: "Overlay", detail: "Highlight areas of concern")
+                )
+                StepRow(
+                    left: StepItem(icon: "clock.badge.checkmark", title: "Instant", detail: "< 1 second"),
+                    right: StepItem(icon: "lock.shield.fill", title: "Private", detail: "100% offline")
+                )
+            }
+        }
+    }
+}
+
+struct StepRow: View {
+    let left: StepItem
+    let right: StepItem
+    var body: some View {
+        HStack(spacing: 14) {
+            left
+            Image(systemName: "chevron.right")
+                .foregroundColor(.secondary)
+            right
+        }
+    }
+}
+
+struct StepItem: View {
+    let icon: String
+    let title: String
+    let detail: String
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(.blue)
+                .frame(width: 28)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+        )
+    }
+}
+
+struct UniquenessSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("What Makes Us Unique")
+                .font(.title2)
+                .fontWeight(.bold)
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 12) {
+                UniqueCard(icon: "square.grid.3x3.fill.square", title: "Segmentation", desc: "Pixel‑level, not just a score")
+                UniqueCard(icon: "lock.shield.fill", title: "Privacy‑First", desc: "All analysis on device")
+                UniqueCard(icon: "highlighter", title: "Actionable", desc: "Visual overlay to discuss with doctor")
+            }
+        }
+    }
+}
+
+struct UniqueCard: View {
+    let icon: String
+    let title: String
+    let desc: String
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(.blue)
+                .frame(width: 40, height: 40)
+                .background(Circle().fill(Color.blue.opacity(0.1)))
+            Text(title)
+                .font(.caption)
+                .fontWeight(.semibold)
+            Text(desc)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+        )
+    }
+}
+
+struct ImplementationPlanSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Implementation Plan (6 Weeks)")
+                .font(.title2)
+                .fontWeight(.bold)
+            
+            VStack(spacing: 12) {
+                PhaseCard(phase: "Phase 1: Model", timeframe: "Weeks 1‑2", owner: "ML Specialist", bullets: [
+                    "Convert SegFormer to Core ML (coremltools)",
+                    "Validate I/O and performance"
+                ])
+                PhaseCard(phase: "Phase 2: UI/UX", timeframe: "Weeks 1‑2 (parallel)", owner: "Frontend Dev", bullets: [
+                    "Design in Figma, build SwiftUI screens",
+                    "Camera, results and info pages"
+                ])
+                PhaseCard(phase: "Phase 3: Integration", timeframe: "Weeks 3‑4", owner: "Integration Dev", bullets: [
+                    "Camera/Photos + Vision/Core ML pipeline",
+                    "Mask overlay on user photo"
+                ])
+                PhaseCard(phase: "Phase 4: QA & Ship", timeframe: "Weeks 5‑6", owner: "Project Lead", bullets: [
+                    "Device testing and polish",
+                    "Docs + App Store submission"
+                ])
+            }
+        }
+    }
+}
+
+struct PhaseCard: View {
+    let phase: String
+    let timeframe: String
+    let owner: String
+    let bullets: [String]
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(phase)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                Spacer()
+                Text(timeframe)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Text(owner)
+                .font(.caption)
+                .foregroundColor(.blue)
+            
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(bullets, id: \.self) { item in
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
+                        Text(item).font(.caption)
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 4)
+        )
+    }
+}
+
+struct ProjectTypeSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Software‑Only Approach")
+                .font(.title2)
+                .fontWeight(.bold)
+            
+            HStack(alignment: .top, spacing: 14) {
+                Image(systemName: "iphone").foregroundColor(.blue).font(.title2)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("No new hardware. We leverage the iPhone's Camera, GPU and Neural Engine.")
+                        .font(.subheadline)
+                    Text("Scalable via App Store, zero manufacturing costs.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 4)
+        )
+    }
+}
+
+struct WhyUsSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Why Select Our Team")
+                .font(.title2)
+                .fontWeight(.bold)
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 12) {
+                WhyCard(icon: "heart.text.square.fill", title: "Impact", desc: "We target a meaningful health problem")
+                WhyCard(icon: "lightbulb.fill", title: "Innovation", desc: "On‑device segmentation, privacy‑first")
+                WhyCard(icon: "person.3.fill", title: "Execution", desc: "Balanced team + clear 6‑week plan")
+            }
+        }
+    }
+}
+
+struct WhyCard: View {
+    let icon: String
+    let title: String
+    let desc: String
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(.blue)
+            Text(title)
+                .font(.caption)
+                .fontWeight(.semibold)
+            Text(desc)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+        )
     }
 }
 
